@@ -3,16 +3,16 @@ import pygame, random
 WIDTH = 1280
 HEIGHT = 720
 GAP = 2
-
+DELAY = 30
 ARRSIZE = 80
 RECTW = WIDTH / ARRSIZE - GAP
-arr = [random.randrange(50, 500) for i in range(80)]
+arr = [random.randrange(50, 500) for i in range(ARRSIZE)]
+fixedIndices = []
 
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Quick Sort')
 
-# ---------------------------
 
 def displayArr(pivot):
 
@@ -24,7 +24,7 @@ def displayArr(pivot):
 
     for i in range(len(arr)):
 
-        if i == pivot:
+        if i in fixedIndices:
             color = (0, 255, 0) # green
         else:
             color = (255, 0, 0) # red
@@ -33,14 +33,31 @@ def displayArr(pivot):
         pygame.draw.rect(window, color, (i * (RECTW + GAP), HEIGHT - arr[i], RECTW, arr[i]))
 
     pygame.display.update()
-    pygame.time.wait(20)
+    pygame.time.wait(DELAY)
+
+
+def displayGreen():
+
+    '''
+    The final green wipe on the sorted array
+    '''
+
+    for i in range(len(arr)):
+
+        color = (0, 255, 0) # green
+
+        # (x-cord, y-cord, width, height)
+        pygame.draw.rect(window, color, (i * (RECTW + GAP), HEIGHT - arr[i], RECTW, arr[i]))
+
+        pygame.display.update()
+        pygame.time.wait(10)
+
 
 def logArr():
     for val in arr:
         print(val, end = ' ')
     print()
 
-# --------------------------------
 
 def quickSort(arr, start , stop):
 
@@ -55,6 +72,8 @@ def quickSort(arr, start , stop):
         return        
 
     pivotIndex = partitionRand(arr, start, stop)
+
+    fixedIndices.append(pivotIndex)
     
     # The array is partitioned at pivotIndex and
     # pivotIndex element is at it's final index
@@ -63,6 +82,7 @@ def quickSort(arr, start , stop):
     quickSort(arr , start , pivotIndex - 1)
     quickSort(arr, pivotIndex + 1, stop)
  
+
 def partitionRand(arr, start, stop):
 
     '''
@@ -72,10 +92,13 @@ def partitionRand(arr, start, stop):
  
     randPivot = random.randrange(start, stop)
 
+    # displayArr(randPivot)
+
     # swap arr[stop] and arr[randPivot]
     arr[stop], arr[randPivot] = arr[randPivot], arr[stop]
 
     return partition(arr, start, stop)
+
 
 def partition(arr, start, stop):
 
@@ -96,17 +119,18 @@ def partition(arr, start, stop):
 
     #swap arr[i] and arr[pivot]
     arr[pivot] , arr[i + 1] = arr[i + 1] , arr[pivot]
+    displayArr(pivot)
 
     pivot = i + 1
     return pivot
 
-# --------------------------------
-
 
 # Driver Code
 if __name__ == "__main__":
+
     running = True
     firstTime = True
+
     while running:
 
         window.fill((0, 0, 0))
@@ -117,5 +141,10 @@ if __name__ == "__main__":
 
         if firstTime:
             quickSort(arr, 0, ARRSIZE - 1)
+
+            # some bars are left untouched cause they come to their place by magically
+            # to make everything look uniform green wash them all
+            displayGreen()
         
         firstTime = False
+        
