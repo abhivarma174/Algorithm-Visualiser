@@ -19,43 +19,64 @@ pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Selection Sort')
 
-# ---------------------------
+# --------------------------------------
+
+
+def displayArr(state):
+    '''
+      displays the array values as bars
+      bars of  heights are equal to the values in array
+    '''
+    window.fill((0, 0, 0))
+    for i in range(len(arr)):
+        if state[i] == 0:
+            color = (255, 0, 0)  # red
+        elif state[i] == 2:
+            color = (0, 255, 0)  # green
+        else:
+            color = (0, 0, 255)  # blue
+
+        # (x-cord, y-cord, width, height)
+        pygame.draw.rect(window, color, (i * (RECTW + GAP),
+                                         HEIGHT - arr[i], RECTW, arr[i]))
+    # (x-cord, y-cord, width, height)
+    pygame.display.update()
+    pygame.time.wait(150)
+
+# -------------------------------------------
 
 
 def selectionSort(itemsList):
+    ''' 
+       sorts the array with selction-sort technique
+    '''
     n = len(itemsList)
     for counter in range(n):
         minValueIndex = counter
 
         for j in range(counter + 1, n):
             if itemsList[j] < itemsList[minValueIndex]:
+                # changing the state value - as indication of minvalue
                 state[j] = 0
                 minValueIndex = j
             else:
                 state[j] = 1
                 state[minValueIndex] = 1
 
+        # swaps - minimum value and counter
+
         itemsList[counter], itemsList[minValueIndex] = itemsList[minValueIndex], itemsList[counter]
 
         if counter < n:
             state[counter] = 2
 
-        window.fill((0, 0, 0))
-        for i in range(n):
-            if state[i] == 0:
-                color = (255, 0, 0)
-            elif state[i] == 2:
-                color = (0, 255, 0)
-            else:
-                color = (0, 0, 255)
-
-            pygame.draw.rect(window, color, (i * (RECTW + GAP),
-                                             HEIGHT - arr[i], RECTW, arr[i]))
-
-        pygame.display.update()
-        pygame.time.wait(150)
+        displayArr(state)
 
 
+# ---------------------------------------'
+
+
+# Driver code
 if __name__ == "__main__":
     running = True
     firstTime = True
