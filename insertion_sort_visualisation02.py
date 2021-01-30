@@ -78,11 +78,21 @@ def insertionsort(arr):
         while j>=0 and key<arr[j]:
             arr[j+1] = arr[j]
             j = j-1
+            STATE[j+1] = 0
+            displayarr(STATE)
+            clear_screen(window)
             STATE[j+1] = 2
             displayarr(STATE)
             clear_screen(window)
         arr[j+1] = key
+        if j<0:
+            STATE[j+1] = 2 
+        else:
+            STATE[j] = 2
+        STATE[i] = 2
+        displayarr(STATE)
         clear_screen(window)
+        
 
 
 #---------------------------------------'
