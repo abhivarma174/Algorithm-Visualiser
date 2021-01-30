@@ -72,18 +72,27 @@ def insertionsort(arr):
     for i in range(1, len(arr)):
         key = arr[i]
         j = i-1
-        
+        STATE[i] = 0
+        displayarr(STATE)
         clear_screen(window)
         while j>=0 and key<arr[j]:
             arr[j+1] = arr[j]
             j = j-1
-            STATE[i] = 0
+            STATE[j+1] = 0
+            displayarr(STATE)
+            clear_screen(window)
+            STATE[j+1] = 2
             displayarr(STATE)
             clear_screen(window)
         arr[j+1] = key
-        STATE[j] = 2
+        if j<0:
+            STATE[j+1] = 2 
+        else:
+            STATE[j] = 2
+        STATE[i] = 2
         displayarr(STATE)
         clear_screen(window)
+        
 
 
 #---------------------------------------'
