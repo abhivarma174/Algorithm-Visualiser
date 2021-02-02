@@ -55,6 +55,10 @@ def displayArr(state):
         if state[i] == 0:
             color = (255, 0, 0)  # red
         elif state[i] == 2:
+            color = (255, 255, 0)
+        elif state[i] == 3:
+            color = (0, 0, 0)
+        elif state[i] == 4:
             color = (0, 255, 0)  # green
         else:
             color = (0, 0, 255)  # blue
@@ -74,24 +78,32 @@ def selectionSort(itemsList):
     n = len(itemsList)
     for counter in range(n):
         minValueIndex = counter
-        state[counter] = 0
+        state[counter] = 2
         for j in range(counter + 1, n):
+            state[j] = 0
+            displayArr(state)
+            clear_screen(window)
+            state[j] = 1
             if itemsList[j] < itemsList[minValueIndex]:
                 # changing the state value - as indication of minvalue
-                state[j] = 0
+                state[j] = 3
+                if minValueIndex != counter:
+                    state[minValueIndex] = 1
                 minValueIndex = j
 
                 displayArr(state)
                 clear_screen(window)
-                state[j] = 1  # change state of  previous minvalue index
+                # state[j] = 3 # change state of  previous minvalue index
 
         # swaps - minimum value and counter
 
         itemsList[counter], itemsList[minValueIndex] = itemsList[minValueIndex], itemsList[counter]
 
+        state[minValueIndex] = 1
+
         # finished - status
         if counter < n:
-            state[counter] = 2
+            state[counter] = 4
 
         displayArr(state)
         clear_screen(window)
