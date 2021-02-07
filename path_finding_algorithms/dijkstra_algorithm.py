@@ -1,4 +1,5 @@
-import pygame, math
+import pygame
+import math
 from queue import PriorityQueue
 from spot import *
 from pygame_utilities import *
@@ -20,13 +21,15 @@ def dijkstras_algorithm(grid, start, end):
     '''
     Implements the dijkstra's path finding algorithm between the start and end in the given grid
     '''
-    open_set = PriorityQueue() # the spots that are yet to be explored, with their distance from start
-    open_set.put((0, start)) # the dist is used to build the heap
-    parent = {} # contains the parent of the spot in the shortest path
-    dist = {spot: float("inf") for row in grid for spot in row} # the distance from start
+    open_set = PriorityQueue(
+    )  # the spots that are yet to be explored, with their distance from start
+    open_set.put((0, start))  # the dist is used to build the heap
+    parent = {}  # contains the parent of the spot in the shortest path
+    # the distance from start
+    dist = {spot: float("inf") for row in grid for spot in row}
     dist[start] = 0
 
-    open_set_hash = {start} # the spots that are yet to explored
+    open_set_hash = {start}  # the spots that are yet to explored
 
     while not open_set.empty():
         clear_screen(screen)
@@ -56,7 +59,7 @@ def dijkstras_algorithm(grid, start, end):
             current.make_closed()
 
 
-# drawing functions 
+# drawing functions
 
 def draw_grid(screen, rows, width):
     '''
@@ -77,7 +80,7 @@ def draw(screen, grid, rows, width):
 
     for row in grid:
         for spot in row:
-            spot.draw(screen) # draws the spots, with it's color
+            spot.draw(screen)  # draws the spots, with it's color
 
     draw_grid(screen, rows, width)
     pygame.display.update()
@@ -89,7 +92,7 @@ def reconstruct_path(parent, current):
     '''
     # the loop runs while current has a parent
     #  only start has no parent, so the loop breaks at start
-    while current in parent: 
+    while current in parent:
         current = parent[current]
         current.make_path()
     # once we update the colors, we reflect them in the display
@@ -129,16 +132,17 @@ def create_grid(rows, width):
 if __name__ == '__main__':
     grid = create_grid(ROWS, WIDTH)
 
-    start = None 
+    start = None
     end = None
 
     while True:
-        is_clicked = button(screen, 'Start', WIDTH / 2 - 60, HEIGHT / 2 + 50, 90, 50, BLUE, ORANGE)
+        is_clicked = button(screen, 'Start', WIDTH / 2 - 60,
+                            HEIGHT / 2 + 50, 90, 50, BLUE, ORANGE)
         pygame.display.update()
 
         if is_clicked:
             break
-        
+
         check_exit()
 
     while True:
@@ -148,7 +152,8 @@ if __name__ == '__main__':
                 pygame.quit()
                 exit()
 
-            if pygame.mouse.get_pressed()[0]: # draw start, end, block spots on mouse press
+            # draw start, end, block spots on mouse press
+            if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 row, col = get_clicked_indices(pos, ROWS, WIDTH)
                 spot = grid[row][col]
@@ -170,4 +175,3 @@ if __name__ == '__main__':
                             spot.update_neighbors(grid)
 
                     dijkstras_algorithm(grid, start, end)
-                    
