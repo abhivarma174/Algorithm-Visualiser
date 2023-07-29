@@ -4,6 +4,7 @@ from spot import *
 from pygame_utilities import *
 
 # set up
+#for commit
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, WIDTH))
